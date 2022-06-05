@@ -3,14 +3,16 @@ on: [push]
 
 env:
   GO_VERSION: 1.18.1
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   go-build:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-go@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
         with:
           go-version: ${{ env.GO_VERSION }}
       - name: make magic
@@ -24,7 +26,7 @@ jobs:
     needs:
       - go-build
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: docker build
       run: make build-image GIT_COMMIT=${{ github.sha }}
 
@@ -33,11 +35,11 @@ jobs:
     needs:
       - docker-build
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: print commit sha
       run: echo ${{ github.sha }}
     - name: push the image
-      uses: mr-smithers-excellent/docker-build-push@v4
+      uses: mr-smithers-excellent/docker-build-push@v5
       with:
         tag: ${{ github.GITHUB_REF }}
         image: la3mmchen/mawo
@@ -51,7 +53,7 @@ jobs:
     needs:
       - docker-build
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: print commit sha
       run: echo ${{ github.sha }}
     - name: push the image
