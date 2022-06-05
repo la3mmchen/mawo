@@ -27,8 +27,6 @@ jobs:
     - uses: actions/checkout@v1
     - name: docker build
       run: make build-image GIT_COMMIT=${{ github.sha }}
-    - name: run app
-      run: docker run --rm -t la3mmchen/mawo:${{ github.sha }}
 
   publish:
     runs-on: ubuntu-latest
