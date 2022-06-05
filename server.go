@@ -95,12 +95,17 @@ func containerResources(w http.ResponseWriter, r *http.Request) {
 
 	// something went wrong
 	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
 		http.Error(w, "Something went wrong.", 500)
 		return
 	}
 
 	// we haven't found anything
 	if errors.IsNotFound(err) {
+		w.WriteHeader(http.StatusNotFound)
+		w.Header().Set("Content-Type", "application/json")
 		http.Error(w, "None found", 404)
 		return
 	}

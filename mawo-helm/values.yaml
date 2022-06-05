@@ -1,14 +1,12 @@
 replicaCount: 1
 
 image:
-  repository: "la3mmchen/mawo"
-  pullPolicy: "Never" #todo: this is only to deploy on minikube
+  repository: "ghcr.io/la3mmchen/mawo"
+  pullPolicy: "Always"
   tag: ""
 
 config:
-  envs:
-    - name: "MAWO_PORT"
-      value: "80"
+  listenPort: "8080"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -37,7 +35,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 80
 
 

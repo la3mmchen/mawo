@@ -6,11 +6,7 @@ metadata:
   labels:
     {{- include "mawo-helm.labels" $ | nindent 4 }}
 rules:
-  - verbs: ['get', 'list']
-    apiGroups: ['']
-    resources: ['namespaces']
-
-  - verbs: ['*']
+  - verbs: ['list']
     apiGroups: ['']
     resources:
       - pods

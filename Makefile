@@ -85,13 +85,24 @@ app-tests:
 #
 # *** helm ***
 #
-.PHONY: deploy
-deploy:
+.PHONY: deploy-dev
+deploy-dev:
 	set -euxo pipefail &&\
 	cd mawo-helm &&\
 	helm lint . &&\
 	helm template . &&\
 	sed -i "" "s/0.0.0/${GIT_COMMIT}/" "./Chart.yaml" &&\
+	helm upgrade --namespace=${PROJECT_NAME} --create-namespace --install -f values.yaml ${PROJECT_NAME} . &&\
+	kubectl --namespace=${PROJECT_NAME} rollout restart deployment ${PROJECT_NAME} &&\
+	git checkout -- Chart.yaml
+
+.PHONY: deploy-latest
+deploy-latest:
+	set -euxo pipefail &&\
+	cd mawo-helm &&\
+	helm lint . &&\
+	helm template . &&\
+	sed -i "" "s/0.0.0/latest/" "./Chart.yaml" &&\
 	helm upgrade --namespace=${PROJECT_NAME} --create-namespace --install -f values.yaml ${PROJECT_NAME} . &&\
 	kubectl --namespace=${PROJECT_NAME} rollout restart deployment ${PROJECT_NAME} &&\
 	git checkout -- Chart.yaml

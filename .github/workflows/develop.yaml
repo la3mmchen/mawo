@@ -36,31 +36,15 @@ jobs:
       - docker-build
     steps:
     - uses: actions/checkout@v3
-    - name: print commit sha
-      run: echo ${{ github.sha }}
+    - name: print meta information
+      run: |
+        echo ${{ github.ref }}
+        echo ${{ github.ACTOR }}
     - name: push the image
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
-        tag: ${{ github.GITHUB_REF }}
-        image: la3mmchen/mawo
-        registry: ghcr.io
-        username: ${{ github.ACTOR }}
-        password: ${{ secrets.PUSHTOKEN }}
-
-  publish-latest:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    needs:
-      - docker-build
-    steps:
-    - uses: actions/checkout@v3
-    - name: print commit sha
-      run: echo ${{ github.sha }}
-    - name: push the image
-      uses: mr-smithers-excellent/docker-build-push@v4
-      with:
-        tag: lastest
-        image: la3mmchen/mawo
+        tags: ${{ github.GITHUB_REF }}
+        image: mawo
         registry: ghcr.io
         username: ${{ github.ACTOR }}
         password: ${{ secrets.PUSHTOKEN }}
